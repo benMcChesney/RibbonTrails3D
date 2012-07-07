@@ -1,0 +1,25 @@
+<Widget>
+    <Kind>4</Kind>
+    <Name>MAX FORCE</Name>
+    <Value>7.02659</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>MAX FORCE RANDOM</Name>
+    <Value>0.22878</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>MAX SPEED</Name>
+    <Value>25</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>MAX SPEED RANDOM</Name>
+    <Value>11.4353</Value>
+</Widget>
+<Widget>
+    <Kind>4</Kind>
+    <Name>BUFFER DISTANCE</Name>
+    <Value>300</Value>
+</Widget>
