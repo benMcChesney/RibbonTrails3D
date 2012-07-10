@@ -21,7 +21,6 @@ void testApp::setup(){
     ofBackground(255);
 		
 	//initialize the variable so it's off at the beginning
-    usecamera = false ; 
     bMouseDown = false ; 
     
     //Add some nice looking colors, acquired from adobe kuler
@@ -37,26 +36,36 @@ void testApp::setup(){
     colorPool.addColor( col4 ) ; 
     colorPool.addColor( col5 ) ; 
     
-    camera.setPosition( 0 , 0 , -100 ) ; //ofGetWidth()/2, ofGetHeight()/2, 0 ) ; 
+    camera.setPosition( ofGetWidth()/2 , ofGetHeight()/2 , -100 ) ; //ofGetWidth()/2, ofGetHeight()/2, 0 ) ; 
+    
+    setupUI() ; 
+    //camera.enableMouseInput() ; 
+    //camera.disableMouseInput() ;
+    //gui->toggleVisible() ; 
+   
 
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
+       
+    ofVec3f mousePoint( mouseX , ofGetHeight() - mouseY , sin( ofGetElapsedTimef() * 5 ) * 200.0f ) ; //sin ( ofGetElapsedTimef() * 1.5 ) * 300.0f );
     
-    for ( int i = 0 ; i < ribbons.size() ; i++ ) 
+    ofVec3f offset = ofVec3f ( ofGetWidth() / 2 , ofGetHeight() /2  , 0 ) ; 
+    mousePoint -= offset ; 
+    
+    for ( int a = 0 ; a < agents.size() ; a++ ) 
     {
-        ribbons[i]->update( ) ; 
-    }
-  
-    if ( bMouseDown == true )  // && gui->isVisible() == false && camera.getMouseInputEnabled() == false ) 
-    {
-        for ( int i = 0 ; i < numRibbons ; i++ ) 
+        //agents[a]->setTarget( mousePoint ) ; 
+        agents[a]->update( ) ; 
+        if ( bMouseDown == true )  // && gui->isVisible() == false && camera.getMouseInputEnabled() == false ) 
         {
-            ofVec3f mousePoint( mouseX ,mouseY , 0 ) ; //sin ( ofGetElapsedTimef() * 1.5 ) * 300.0f );
-            ribbons[i]->addPoint( mousePoint ) ; 
+            agents[a]->followRibbon.addPoint( mousePoint ) ; 
         }
     }
+    
+    
+
 }
 
 //--------------------------------------------------------------
@@ -65,21 +74,30 @@ void testApp::draw(){
     
 	//if we're using the camera, start it.
 	//everything that you draw between begin()/end() shows up from the view of the camera
-    if(usecamera){
-        camera.begin();
-    }
+    camera.begin();
+
     
     //Draw the ribbons ! Nice and simple
-    for ( int i = 0 ; i < ribbons.size() ; i++ ) 
+    for ( int a = 0 ; a < agents.size() ; a++ ) 
     {
-        ribbons[i]->draw( ) ; 
-    }    
+        agents[a]->draw( ) ; 
+    }  
 		
 	//if we're using the camera, take it away
-    if(usecamera){
-    	camera.end();
-    }
+    camera.end();
     
+    
+    ofSetColor( 15 , 15 , 15 ) ; 
+    
+    string status = " ofEasyCam mouse input is : " ; 
+    if ( camera.getMouseInputEnabled() == true ) 
+        status += " ENABLED" ; 
+    else
+        status += " DISABLED" ; 
+    
+    status += "\n" ; 
+    
+    ofDrawBitmapString( status , 30 , ofGetHeight() - 35 ) ; 
 }
 
 //--------------------------------------------------------------
@@ -88,19 +106,18 @@ void testApp::keyPressed(int key){
     {
         case 'm':
         case 'M':
+            cout << "toggeling mouse!" << endl ; 
             //Toggle mouse on the camera
-            if ( camera.getMouseInputEnabled() ) 
+            
+            if ( !camera.getMouseInputEnabled() ) 
                 camera.enableMouseInput() ; 
             else
                 camera.disableMouseInput() ; 
-            return ; 
             break  ;
             
-        case 'c':
-        case 'C':
-            //Toggle the camera
-            usecamera = !usecamera;
-            return ; 
+        case 'g':
+        case 'G':
+            gui->toggleVisible() ; 
             break ; 
     }
 }
@@ -114,7 +131,7 @@ void testApp::keyReleased(int key){
 void testApp::mouseMoved(int x, int y ){
 }
 
-/* FOR LATER
+// ofxUI
  
 void testApp::setupUI ( ) 
 {
@@ -179,8 +196,20 @@ void testApp::guiEvent(ofxUIEventArgs &e)
     }
 
     gui->saveSettings("GUI/settings.xml") ; 
+    updateAgents( )  ; 
+}
+
+void testApp::updateAgents( ) 
+{
+    return ; 
     
-}*/
+    for ( int i = 0 ; i < agents.size() ; i++ ) 
+    {
+        agents[i]->maxForce = maxForce + ofRandom( -maxForceRandom , maxForceRandom ) ;
+        agents[i]->maxVelocity = maxSpeed + ofRandom( -maxSpeedRandom , maxSpeedRandom ) ;
+        agents[i]->targetBufferDist = bufferDistance ; 
+    }
+}
 //--------------------------------------------------------------
 void testApp::mouseDragged(int x, int y, int button){
     
@@ -189,22 +218,34 @@ void testApp::mouseDragged(int x, int y, int button){
 //--------------------------------------------------------------
 void testApp::mousePressed(int x, int y, int button){
     
+    if ( camera.getMouseInputEnabled() == true ) 
+        return ; 
+    
+   // if ( gui->isVisible() == true )
+   //     return ; 
+    
     //Reset all of our ribbons
     bMouseDown = true ; 
     
-    numRibbons = ofRandom ( 15 , 60 ) ; 
-    ribbons.clear() ; 
+    numRibbons = ofRandom ( 85 , 125 ) ;  
+    agents.clear() ; 
+    
     for ( int i = 0 ; i < numRibbons ; i++ ) 
     {
-        Ribbon * ribbon = new Ribbon () ;
-        ribbon->setup() ; 
-        ribbon->color = colorPool.getRandomColor( ) ; 
-        ribbons.push_back( ribbon ) ; 
+        Agent * agent = new Agent() ; 
+        agent->color = colorPool.getRandomColor( ) ; 
+        agent->setup( ofVec3f( 0 , 0, 0 ) ) ;
+        agents.push_back( agent ) ; 
     }
+    
+    updateAgents( ) ; 
 }
 
 //--------------------------------------------------------------
 void testApp::mouseReleased(int x, int y, int button){
+    
+    if ( camera.getMouseInputEnabled() == true || gui->isVisible() == true ) 
+        return ; 
     
     //End our drawing
     bMouseDown = false ; 

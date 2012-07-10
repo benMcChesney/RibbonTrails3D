@@ -14,8 +14,8 @@
 #include "ofMain.h"
 #include "Ribbon.h"
 #include "ColorPool.h"
-//#include "ofxUI.h"
-//#include "Agent.h"
+#include "ofxUI.h"
+#include "Agent.h"
 
 class testApp : public ofBaseApp{
 
@@ -45,26 +45,28 @@ class testApp : public ofBaseApp{
 	//if usecamera is true, we'll turn on the camera view
     bool usecamera;
 
-    vector<Ribbon*> ribbons ; 
+//    vector<Ribbon*> ribbons ; 
     int numRibbons ; 
     
-   // vector<Agent*> agents ; 
+    vector<Agent*> agents ; 
     
     bool bMouseDown ; 
     
     ColorPool colorPool ; 
     
-    //ofxUICanvas *gui;   	
-	//void guiEvent(ofxUIEventArgs &e);
-    //bool drawPadding; 
+    ofxUICanvas *gui;   	
+	void guiEvent(ofxUIEventArgs &e);
+    bool drawPadding; 
     
-    //void setupUI( ) ; 
+    void setupUI( ) ; 
     
-    //float maxForce ; 
-    //float maxForceRandom ; 
-    //float maxSpeed ; 
-    //float maxSpeedRandom ; 
-    //float bufferDistance ; 
+    float maxForce ; 
+    float maxForceRandom ; 
+    float maxSpeed ; 
+    float maxSpeedRandom ; 
+    float bufferDistance ; 
+    
+    void updateAgents() ; 
     
     
 };

@@ -34,6 +34,8 @@ class Ribbon
     
         float maxThickness ;        //Varying thickness per ribbon
         bool bDoneDrawing ;
+    
+        
         
         void setup ( ) 
         {
@@ -45,6 +47,8 @@ class Ribbon
             offset = ofVec3f ( ofRandom( -range , range ) , ofRandom ( -range , range ) , ofRandom ( -range , range ) ) ; 
             maxThickness = ofRandom ( 8 , 25 ) ; 
             bDoneDrawing = false ; 
+            
+            
             //cout << "setup : " << endl ; 
         } 
         

@@ -20,71 +20,80 @@
 
 void Agent::setup( ofVec3f p ) // , ofVec3f a , float _wallDistance = 1.0f )
 {
-    targetBufferDist = 50.0f ;
-    //wallDistance = _wallDistance ;
+    targetBufferDist = 80.0f ;
     position = p ;
-    //acceleration = a ;
     bTarget = false ;
-
-   // position = ofVec3f ( ofGetWidth()/2 , ofGetHeight()/2 , 0 ) ;
-    //velocity = ofVec2f ( 1 ,  ofRandom( TWO_PI )  ) ;
-
     velocity = ( ofRandom(TWO_PI) , ofRandom( TWO_PI ) ) ;
-    //acceleration = ofVec2f( .4 , .4 ) ;
 
     force = ofVec3f( 0.0f , 0.0f ) ;
-    maxVelocity = ofRandom( 9, 12 )  ;
+    maxVelocity = ofRandom( 18, 36 )  ;
 
     //Max turn
     maxForce = ofRandom( 0.1 , 0.5f ) ; 
     
     targetIndex = 0 ;
 
+    trailRibbon.setup() ; 
+    trailRibbon.color = color ; //colorPool.getRandomColor( ) ; 
+    
+    followRibbon.setup() ; 
+    followRibbon.color = color ;
+    
+    bFirstTarget = false ; 
+    
+    thickness = ofRandom( 20 , 32 ) ; 
+    trailRibbon.maxThickness = thickness ;  
 }
 
 void Agent::draw( ) 
 {
     ofSetColor ( color ) ; 
-    //ribbon.draw() ; 
+    trailRibbon.draw() ; 
     ofPushMatrix() ; 
         ofTranslate( position ) ; 
         ofSetColor( color );
-        ofCircle( 0 , 0, 25 ) ; 
+        ofSphere( 0 , 0, 0 , thickness/2 ) ; 
+        //ofCircle( 0 , 0, 25 ) ; 
     ofPopMatrix() ; 
 }
 
 void Agent::update( )
 {
-    ribbon.update() ; 
-    ribbon.addPoint( position ) ; 
-    ribbon.maxThickness = 6 ; 
-    ribbon.color = color ; 
- //   if ( bFinished )
- //       return ;
-    
     float dist = ofDist ( position.x , position.y , target.x , target.y ) ;
     if ( dist < targetBufferDist )
     {
+        if ( bFirstTarget == false ) 
+            bFirstTarget = true ; 
         
         //bTarget = true ;
        // if ( agent.bTarget == true && points.size() > 1 ) 
        // {
         targetIndex+= 1 ; 
-        cout << "target index is now : " << targetIndex << endl ; 
-        cout << " x : " << target.x << " , " << target.y << " , " << target.z << endl ; 
-        if ( targetIndex >= ( ribbon.points.size() - 1 ) ) 
+        //cout << "target index is now : " << targetIndex << endl ; 
+        //cout << " x : " << target.x << " , " << target.y << " , " << target.z << endl ; 
+        if ( targetIndex >= ( followRibbon.points.size() - 1 ) ) 
         {
             targetIndex = 0 ; 
         }
           
-        if ( ribbon.points.size() > 0 ) 
+        if ( followRibbon.points.size() > 0 ) 
         {
-            target = ribbon.points [ targetIndex ] ;
+            target = followRibbon.points [ targetIndex ] ;
         }
+        
+         
         //    agent.bTarget = false ; 
         //}
 
     }
+    
+    if ( bFirstTarget == true ) 
+        trailRibbon.addPoint( ofVec3f( position ) ) ;
+    
+    //  float dist = mousePoint.distance( agents[a]->target ) ; // ofDist( mousePoint.x , mousePoint.y , agents[a]->target.x , 
+    followRibbon.update() ; // = (*ribbons[a] ) ; 
+    trailRibbon.update() ;
+
 /*
     if ( ofGetFrameNum() % pathSampling == 0 )
     {
@@ -114,19 +123,6 @@ void Agent::update( )
     velocity.limit(maxVelocity);
     position += velocity;
 
-    /*
-     NO WRAP
-     int w = ofGetWidth() ;
-     int h = ofGetHeight() ;
-     if ( position.x < 0 )
-     position.x += w ;
-     if ( position.x > w )
-     position += -w ;
-     if ( position.y < 0 )
-     position.y += h ;
-     if ( position.y > h )
-     position.y += -h ;
-     */
     seek( target ) ;
 }
 

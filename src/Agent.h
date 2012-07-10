@@ -36,7 +36,14 @@ class Agent
        // bool bFinished ;
     
         int targetIndex ; 
-        Ribbon ribbon ; 
+        Ribbon trailRibbon ; 
+        Ribbon followRibbon ; 
+        
+        bool bFirstTarget ;
+    
+        float thickness ; 
+    
+       
 
     /*
      ofEvents<ofVec2f> NEW_AGENT_TARGET ;
