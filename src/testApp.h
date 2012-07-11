@@ -66,7 +66,17 @@ class testApp : public ofBaseApp{
     float maxSpeedRandom ; 
     float bufferDistance ; 
     
-    void updateAgents() ; 
+    float tailLength ; 
+    float tailLengthRandom ;
+    float thickness ; 
+    float thicknessRandom ; 
+    
+    void updateAgents() ;
+    void updateAgentTrails() ;
+    
+    float numParticles ; 
+    
+    void createAgents( bool bFirstMake = false ) ; 
     
     
 };
