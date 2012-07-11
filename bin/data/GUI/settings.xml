@@ -1,7 +1,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>MAX FORCE</Name>
-    <Value>4.28573</Value>
+    <Value>6.20433</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -11,7 +11,7 @@
 <Widget>
     <Kind>4</Kind>
     <Name>MAX SPEED</Name>
-    <Value>44.5133</Value>
+    <Value>15.5557</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
@@ -26,25 +26,25 @@
 <Widget>
     <Kind>4</Kind>
     <Name>TRAIL LENGTH</Name>
-    <Value>34.8049</Value>
+    <Value>50.5</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>TRAIL LENGTH RANDOM</Name>
-    <Value>100</Value>
+    <Value>13.0732</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>THICKNESS</Name>
-    <Value>100</Value>
+    <Value>39.6341</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>THICKNESS RANDOM</Name>
-    <Value>19.7134</Value>
+    <Value>11.8659</Value>
 </Widget>
 <Widget>
     <Kind>4</Kind>
     <Name>NUM PARTICLES</Name>
-    <Value>80.8781</Value>
+    <Value>44.4268</Value>
 </Widget>
